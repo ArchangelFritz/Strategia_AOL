@@ -1,0 +1,42 @@
+name: Deploy to Azure VM
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Sync files via rsync
+      run: |
+        rsync -avz --delete \
+          -e "ssh -i ~/.ssh/deploy_key" \
+          ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/deploy/app/
+
+    - name: Install dependencies on VM
+      run: |
+        ssh -i ~/.ssh/deploy_key \
+          ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
+            source ~/env/bin/activate
+            pip install --upgrade pip
+            pip install -r /home/deploy/app/requirements.txt
+        EOF
+
+    - name: Restart systemd service
+      run: |
+        ssh -i ~/.ssh/deploy_key \
+          ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+          "sudo systemctl restart aol.service"
+
