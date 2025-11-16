@@ -1,21 +1,22 @@
 from openai import OpenAI
-from app.retrieve import retrieve_chunks
-from app.utils.chunking import chunk_text
-from app.utils.embed import embed_text
+from app.retrieve import retrieve
+from app.router import route_query
 from app.utils.config import settings
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
-def answer_query(query: str, corpus: str):
-    # Embed query
-    query_embedding = embed_text([query])[0]
+def answer_query(query: str):
+    # pick which corpus/index to pull from
+    corpus = route_query(query)
 
-    # Retrieve context
-    chunks = retrieve_chunks(query_embedding, corpus=corpus, top_k=5)
-    context = "\n\n".join(chunks)
+    # do multi-tier retrieval
+    chunks = retrieve(query, corpus)
+
+    # join context
+    context = "\n\n----\n\n".join(chunks)
 
     prompt = f"""
-    You are an enterprise AI assistant. Use the context below to answer:
+    Use the context ONLY to answer the question.
 
     CONTEXT:
     {context}
@@ -23,12 +24,15 @@ def answer_query(query: str, corpus: str):
     QUESTION:
     {query}
 
-    If the context does not contain the answer, say you don't know.
+    Provide answer and cite sources from the provided context.
     """
 
-    completion = client.responses.create(
+    resp = client.responses.create(
         model="gpt-4.1",
         input=prompt
     )
 
-    return completion.output_text
+    return {
+        "answer": resp.output_text,
+        "sources": chunks
+    }
