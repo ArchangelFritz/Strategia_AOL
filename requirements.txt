@@ -9,3 +9,10 @@ azure-ai-formrecognizer
 openai
 requests
 tiktoken
+rank-bm25
+sentence-transformers
+chromadb
+openai
+numpy
+torch
+transformers
