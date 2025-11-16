@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+chromadb
+sentence-transformers
+rank-bm25
+python-dotenv
+pypdf2
+azure-ai-formrecognizer
+openai
+requests
+tiktoken
