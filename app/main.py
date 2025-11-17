@@ -3,7 +3,6 @@ from app.router import router as chat_router
 from app.ingest import router as ingest_router
 from app.retrieve import router as retrieve_router
 from app.contract_review import router as contract_router
-from app.contract_review import router as contract_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Strategia AOL Backend")

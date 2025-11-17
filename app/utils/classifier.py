@@ -67,8 +67,8 @@ def classify_query(query: str) -> str:
     ]):
         return "Risk Management"
 
-    # ------------------------------
-    # Administration
-    # ------------------------------
-    if any(w in q for w in [
-        "admin", "administration", "office", "front desk
+    # # ------------------------------
+    # # Administration
+    # # ------------------------------
+    # if any(w in q for w in [
+    #     "admin", "administration", "office", "front desk

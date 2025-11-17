@@ -2,12 +2,13 @@ from openai import OpenAI
 from app.retrieve import retrieve
 from app.router import route_query
 from app.utils.config import settings
+from app.utils.classifier import classify_query
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 def answer_query(query: str):
     # pick which corpus/index to pull from
-    corpus = route_query(query)
+    corpus = classify_query(query)
 
     # do multi-tier retrieval
     chunks = retrieve(query, corpus)
