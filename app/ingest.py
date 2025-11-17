@@ -4,6 +4,7 @@ from app.utils.chunking import chunk_text
 from app.utils.embed import embed_text
 from app.storage.vector_store import vector_db
 from app.utils.classifier import classify_query
+from app.storage.full_docs import full_doc_store
 
 
 router = APIRouter()
@@ -30,6 +31,11 @@ async def ingest_file(
     bytes_data = await file.read()
 
     text = extract_text_from_document(bytes_data)
+    full_doc_store.upsert_document(
+    filename=file.filename,
+    text=text
+)
+
     chunks = chunk_text(text)
     embeddings = embed_text(chunks)
 
