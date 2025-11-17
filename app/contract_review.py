@@ -26,3 +26,7 @@ async def review_contract(filename: str):
         "analysis": analysis,
         "raw_text": full_text
     }
+
+@router.get("/debug")
+def debug_list():
+    return full_doc_store.list_documents()
