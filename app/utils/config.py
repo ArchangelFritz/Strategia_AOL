@@ -1,9 +1,11 @@
-import os
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY")
-    AZURE_OCR_KEY: str = os.getenv("AZURE_OCR_KEY")
-    AZURE_OCR_ENDPOINT: str = os.getenv("AZURE_OCR_ENDPOINT")
+    OPENAI_API_KEY: str | None = None
+    AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT: str | None = None
+    AZURE_DOCUMENT_INTELLIGENCE_KEY: str | None = None
+
+    class Config:
+        env_file = ".env"
 
 settings = Settings()
