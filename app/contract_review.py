@@ -10,8 +10,8 @@ router = APIRouter()
 @router.get("/debug")
 def debug_list():
     return full_doc_store.list_documents()
-    
-@router.get("/{filename}")
+
+@router.get("/{filename:path}")
 async def review_contract(filename: str):
     # Step 1: Retrieve full text
     full_text = full_doc_store.get_document(filename)
