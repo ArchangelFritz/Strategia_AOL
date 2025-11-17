@@ -48,7 +48,7 @@ async def ingest_file(
 
 
 
-    return {"status": "ok", "chunks": len(chunks)}
+    return {"status": "ok"}
     
 
     
