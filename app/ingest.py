@@ -9,7 +9,13 @@ from app.storage.full_docs import full_doc_store
 
 router = APIRouter()
 
+def process_document(filename, bytes_data):
+    text = extract_text_from_document(bytes_data)
+    full_doc_store.upsert_document(filename, text)
+    chunks = chunk_text(text)
+    embeddings = embed_text(chunks)
 
+    vector_db.add_texts(collection=corpus, texts=chunks, embeddings=embeddings)
 
 @router.post("/file")
 async def ingest_file(
@@ -27,19 +33,17 @@ async def ingest_file(
     else:
         # classification based on filename
         corpus = classify_query(file.filename)
-    
+#     @router.post("/file")
+# async def ingest_file(file: UploadFile, background_tasks: BackgroundTasks):
+#     bytes_data = await file.read()
+
+#     background_tasks.add_task(process_document, file.filename, bytes_data)
+
+#     return {"status": "processing", "filename": file.filename}
     bytes_data = await file.read()
+    background_tasks.add_task(process_document, file.filename, bytes_data)
 
-    text = extract_text_from_document(bytes_data)
-    full_doc_store.upsert_document(
-    filename=file.filename,
-    text=text
-)
 
-    chunks = chunk_text(text)
-    embeddings = embed_text(chunks)
-
-    vector_db.add_texts(collection=corpus, texts=chunks, embeddings=embeddings)
 
     return {"status": "ok", "chunks": len(chunks)}
     

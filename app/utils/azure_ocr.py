@@ -1,31 +1,29 @@
-import time
-import requests
+from azure.ai.formrecognizer import DocumentAnalysisClient
+from azure.core.credentials import AzureKeyCredential
 from app.utils.config import settings
+import time
 
 def extract_text_from_document(file_bytes: bytes) -> str:
     endpoint = settings.DOC_INTEL_ENDPOINT
-    
     key = settings.DOC_INTEL_KEY
 
-    url = f"{endpoint}/formrecognizer/documentModels/prebuilt-document:analyze?api-version=2023-07-31"
+    client = DocumentAnalysisClient(
+        endpoint=endpoint, credential=AzureKeyCredential(key)
+    )
 
-    headers = {
-        "Ocp-Apim-Subscription-Key": key,
-        "Content-Type": "application/pdf"
-    }
+    # Start the job (async)
+    poller = client.begin_analyze_document(
+        "prebuilt-read",
+        document=file_bytes
+    )
 
-    response = requests.post(url, headers=headers, data=file_bytes)
+    # Poll until complete (Azure recommended way)
+    result = poller.result()
 
-    if response.status_code != 202:
-        raise Exception(f"OCR failed: {response.text}")
+    # Extract text
+    all_text = []
+    for page in result.pages:
+        for line in page.lines:
+            all_text.append(line.content)
 
-    op_location = response.headers["operation-location"]
-
-    # Poll
-    while True:
-        result = requests.get(op_location, headers={"Ocp-Apim-Subscription-Key": key}).json()
-        if result["status"] == "succeeded":
-            return "\n".join([c["content"] for c in result["analyzeResult"]["content"]])
-        if result["status"] == "failed":
-            raise RuntimeError("OCR failed")
-        time.sleep(1)
+    return "\n".join(all_text)
