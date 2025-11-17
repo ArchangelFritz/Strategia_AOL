@@ -9,7 +9,7 @@ from fastapi.background import BackgroundTasks
 
 router = APIRouter()
 
-def process_document(filename, bytes_data):
+def process_document(corpus,filename, bytes_data):
     text = extract_text_from_document(bytes_data)
     full_doc_store.upsert_document(filename, text)
     chunks = chunk_text(text)
@@ -44,7 +44,7 @@ async def ingest_file(
 
 #     return {"status": "processing", "filename": file.filename}
     bytes_data = await file.read()
-    background_tasks.add_task(process_document, file.filename, bytes_data)
+    background_tasks.add_task(process_document, corpus,file.filename, bytes_data)
 
 
 
