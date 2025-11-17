@@ -1,6 +1,5 @@
 from openai import OpenAI
 from app.retrieve import retrieve
-from app.router import route_query
 from app.utils.config import settings
 from app.utils.classifier import classify_query
 
