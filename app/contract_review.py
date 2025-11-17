@@ -6,6 +6,11 @@ from app.contract_agent import analyze_contract
 
 router = APIRouter()
 
+
+@router.get("/debug")
+def debug_list():
+    return full_doc_store.list_documents()
+    
 @router.get("/{filename}")
 async def review_contract(filename: str):
     # Step 1: Retrieve full text
@@ -27,6 +32,4 @@ async def review_contract(filename: str):
         "raw_text": full_text
     }
 
-@router.get("/debug")
-def debug_list():
-    return full_doc_store.list_documents()
+
