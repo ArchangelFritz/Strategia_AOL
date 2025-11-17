@@ -5,7 +5,7 @@ from app.utils.embed import embed_text
 from app.storage.vector_store import vector_db
 from app.utils.classifier import classify_query
 from app.storage.full_docs import full_doc_store
-
+from fastapi.background import BackgroundTasks
 
 router = APIRouter()
 
@@ -17,11 +17,14 @@ def process_document(filename, bytes_data):
 
     vector_db.add_texts(collection=corpus, texts=chunks, embeddings=embeddings)
 
+
 @router.post("/file")
 async def ingest_file(
     file: UploadFile,
-    department: str | None = None   # Allow overrid
+    background_tasks: BackgroundTasks,
+    department: str | None = None
 ):
+
 
     if not file.filename:
         raise HTTPException(400, "No file provided")
