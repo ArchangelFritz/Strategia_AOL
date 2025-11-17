@@ -30,7 +30,7 @@ jobs:
         ssh -i ~/.ssh/deploy_key \
           ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
             source ~/env/bin/activate
-            pip3 install --upgrade pip3
+            pip3 install --upgrade pip
             pip3 install -r /home/deploy/app/requirements.txt
         EOF
 
