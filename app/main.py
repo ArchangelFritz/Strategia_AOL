@@ -4,9 +4,18 @@ from app.ingest import router as ingest_router
 from app.retrieve import router as retrieve_router
 from app.contract_review import router as contract_router
 from app.contract_review import router as contract_router
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Strategia AOL Backend")
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # TEMPORARY for development
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(contract_router, prefix="/contract-review", tags=["contracts"])
