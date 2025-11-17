@@ -17,3 +17,5 @@ numpy
 torch
 transformers
 pydantic-settings
+azure-identity
+azure-keyvault-secrets
