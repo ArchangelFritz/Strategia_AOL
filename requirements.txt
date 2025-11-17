@@ -16,3 +16,4 @@ openai
 numpy
 torch
 transformers
+pydantic-settings
