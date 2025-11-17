@@ -24,39 +24,38 @@ STRICT RULES:
 Return your answer in JSON with the following fields:
 
 
-
 {{
-  "contract_metadata": {
+  "contract_metadata": {{
     "payor_name": "",
     "provider_name": "",
     "effective_date": "",
     "termination_date": "",
     "auto_renewal": "",
     "contract_type": ""
-  },
-  "economic_terms": {
+  }},
+  "economic_terms": {{
     "reimbursement_methodology": "",
     "rate_schedule_or_fee_basis": "",
     "claims_payment_timeline": "",
     "value_based_or_bonus_programs": "",
     "capitation_terms": "",
     "risk_adjustment_factors": ""
-  },
-  "operational_terms": {
+  }},
+  "operational_terms": {{
     "authorization_requirements": "",
     "timely_filing_limits": "",
     "audit_rights_and_recoupment_terms": "",
     "network_access_or_steerage_terms": "",
     "provider_obligations": "",
     "dispute_resolution_process": ""
-  },
-  "compliance_terms": {
+  }},
+  "compliance_terms": {{
     "HIPAA_and_data_requirements": "",
     "quality_reporting_requirements": "",
     "termination_without_cause_notice_period": "",
     "most_favored_nation_or_parity_clauses": "",
     "delegation_or_subcontracting_limits": ""
-  }
+  }}
 }}
 
 CONTRACT FILENAME:
