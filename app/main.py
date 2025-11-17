@@ -20,7 +20,7 @@ app.add_middleware(
 app.include_router(contract_router, prefix="/contract-review", tags=["contracts"])
 app.include_router(chat_router, prefix="/chat", tags=["chat"])
 app.include_router(ingest_router, prefix="/ingest", tags=["ingest"])
-app.include_router(retrieve_router, prefix="/retrieve", tags=["retrieve"])
+# app.include_router(retrieve_router, prefix="/retrieve", tags=["retrieve"])
 
 @app.get("/health")
 def health():
