@@ -4,6 +4,7 @@ from app.utils.config import settings
 
 def extract_text_from_document(file_bytes: bytes) -> str:
     endpoint = settings.DOC_INTEL_ENDPOINT
+    
     key = settings.DOC_INTEL_KEY
 
     url = f"{endpoint}/formrecognizer/documentModels/prebuilt-document:analyze?api-version=2023-07-31"
